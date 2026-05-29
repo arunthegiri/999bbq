@@ -5,11 +5,8 @@ import com.kbbq999.enums.MealType;
 import com.kbbq999.enums.Size;
 import com.kbbq999.enums.ToppingCategory;
 import com.kbbq999.menu.BBQPlate;
-import com.kbbq999.menu.MenuItem;
 import com.kbbq999.menu.Order;
 import com.kbbq999.menu.Topping;
-import com.kbbq999.service.GeminiDescriptionService;
-import com.kbbq999.service.GeminiSession;
 
 public class AddItemScreen {
 
@@ -29,14 +26,10 @@ public class AddItemScreen {
 
     private Scanner scanner;
     private Order order;
-    private GeminiDescriptionService geminiService;
-    private GeminiSession currentSession;
 
-    public AddItemScreen(Scanner scanner, Order order, GeminiDescriptionService geminiService) {
+    public AddItemScreen(Scanner scanner, Order order) {
         this.scanner = scanner;
         this.order = order;
-        this.geminiService = new GeminiDescriptionService(System.getenv("GEMINI_API_KEY"));
-        this.currentSession = null;
     }
 
     public void display() {
@@ -90,49 +83,17 @@ public class AddItemScreen {
         if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
             plate.toggleAllYouCanEat();
         }
-        return plate;
-    }
-
-    public void showItemOptions(MenuItem item) {
-        System.out.println("\n" + item);
+        System.out.println("\n" + plate);
         System.out.println("1) Add to cart");
-        System.out.println("2) Tell me more");
+        System.out.println("2) Back to menu");
         while (true) {
             String input = scanner.nextLine().trim();
             if ("1".equals(input)) {
-                order.addItem(item);
+                order.addItem(plate);
                 System.out.println("Added to order!");
-                return;
+                return plate;
             } else if ("2".equals(input)) {
-                triggerTellMeMore(item);
-                return;
-            }
-        }
-    }
-
-    public void triggerTellMeMore(MenuItem item) {
-        currentSession = new GeminiSession(item);
-        currentSession.start();
-        handleGeminiLoop(currentSession);
-    }
-
-    public void handleGeminiLoop(GeminiSession session) {
-        System.out.println(geminiService.describe(session.getCurrentItem().getName()));
-        while (true) {
-            System.out.println("--------------------------------");
-            System.out.println("Type your question or:");
-            System.out.println("1) Add to cart");
-            System.out.println("2) Back to menu");
-            String input = scanner.nextLine().trim();
-            if ("1".equals(input)) {
-                order.addItem(session.getCurrentItem());
-                session.close();
-                return;
-            } else if ("2".equals(input)) {
-                session.close();
-                return;
-            } else {
-                System.out.println(session.ask(input));
+                return null;
             }
         }
     }
@@ -158,21 +119,20 @@ public class AddItemScreen {
             try {
                 choice = Integer.parseInt(line);
             } catch (NumberFormatException e) {
-                System.out.println("Pick 1-" + options.length + " or 0 to skip:");
+                System.out.println("\n--- " + header + " (0 to skip) ---");
+                for (int i = 0; i < options.length; i++) {
+                    System.out.println((i + 1) + ") " + options[i]);
+                }
                 continue;
             }
             if (choice < 1 || choice > options.length) {
-                System.out.println("Pick 1-" + options.length + " or 0 to skip:");
+                System.out.println("\n--- " + header + " (0 to skip) ---");
+                for (int i = 0; i < options.length; i++) {
+                    System.out.println((i + 1) + ") " + options[i]);
+                }
                 continue;
             }
             String name = options[choice - 1];
-            System.out.println("T) Tell me more about this item");
-            String tmm = scanner.nextLine().trim();
-            if (tmm.equalsIgnoreCase("T")) {
-                GeminiSession ts = new GeminiSession(new BBQPlate("", plate.getSize(), plate.getMealType()));
-                ts.start();
-                System.out.println(ts.ask("What is " + name + "? Describe it for a customer"));
-            }
             boolean isExtra = false;
             if (canBeExtra) {
                 System.out.println("Extra? (y/n):");

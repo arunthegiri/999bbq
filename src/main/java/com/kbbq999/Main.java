@@ -3,7 +3,6 @@ package com.kbbq999;
 import java.util.Scanner;
 import com.kbbq999.menu.Drink;
 import com.kbbq999.menu.Order;
-import com.kbbq999.menu.BBQPlate;
 import com.kbbq999.menu.Side;
 import com.kbbq999.screens.AddDrinkScreen;
 import com.kbbq999.screens.AddItemScreen;
@@ -11,14 +10,12 @@ import com.kbbq999.screens.AddSideScreen;
 import com.kbbq999.screens.CheckoutScreen;
 import com.kbbq999.screens.HomeScreen;
 import com.kbbq999.screens.OrderScreen;
-import com.kbbq999.service.GeminiDescriptionService;
 import com.kbbq999.service.ReceiptService;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        GeminiDescriptionService geminiService = new GeminiDescriptionService(null);
         ReceiptService receiptService = new ReceiptService();
 
         while (true) {
@@ -42,9 +39,8 @@ public class Main {
 
                 switch (choice) {
                     case 1 -> {
-                        AddItemScreen addItem = new AddItemScreen(scanner, order, geminiService);
-                        BBQPlate plate = addItem.buildPlate();
-                        if (plate != null) addItem.showItemOptions(plate);
+                        AddItemScreen addItem = new AddItemScreen(scanner, order);
+                        addItem.buildPlate();
                     }
                     case 2 -> {
                         AddDrinkScreen addDrink = new AddDrinkScreen(scanner, order);

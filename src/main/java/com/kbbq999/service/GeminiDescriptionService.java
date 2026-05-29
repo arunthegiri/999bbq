@@ -10,7 +10,7 @@ public class GeminiDescriptionService implements IAIDescribable {
 
     private static final String SYSTEM_PROMPT =
         "You are a friendly Korean BBQ restaurant guide for 999BBQ, a high-end Korean BBQ restaurant. " +
-        "Help customers understand Korean BBQ dishes, ingredients and culture in a warm, approachable way. " +
+        "Help customers understand Korean BBQ dishes, ingredients and culture in a warm approachable way. " +
         "Keep responses under 3 sentences.";
 
     private static final String BASE_URL =
@@ -36,8 +36,11 @@ public class GeminiDescriptionService implements IAIDescribable {
                 .build();
             HttpResponse<String> response =
                 client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("[Gemini raw response] " + response.body());
             return extractText(response.body());
         } catch (Exception e) {
+            System.out.println("[Gemini error] " + e.getMessage());
+            e.printStackTrace();
             return "";
         }
     }
@@ -56,8 +59,8 @@ public class GeminiDescriptionService implements IAIDescribable {
 
     private String buildRequestBody(String prompt) {
         return "{"
-            + "\"systemInstruction\":{\"parts\":[{\"text\":\"" + escapeJson(SYSTEM_PROMPT) + "\"}]},"
-            + "\"contents\":[{\"parts\":[{\"text\":\"" + escapeJson(prompt) + "\"}]}]"
+            + "\"contents\":[{\"parts\":[{\"text\":\"" + escapeJson(prompt) + "\"}]}],"
+            + "\"systemInstruction\":{\"parts\":[{\"text\":\"" + escapeJson(SYSTEM_PROMPT) + "\"}]}"
             + "}";
     }
 
