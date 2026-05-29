@@ -53,6 +53,10 @@ public class Main {
                         if (side != null) order.addSide(side);
                     }
                     case 4 -> {
+                        if (!order.validate()) {
+                            System.out.println("Please add at least one item, drink, or side before checking out.");
+                            break;
+                        }
                         CheckoutScreen checkout = new CheckoutScreen(scanner, order, receiptService);
                         checkout.display();
                         int checkoutChoice = checkout.getUserChoice();
