@@ -13,10 +13,25 @@ public class Drink extends MenuItem {
     }
 
     public DrinkType getDrinkType() { return drinkType; }
-    public double getPrice() { return 0.0; }
+
+    public double getPrice() {
+        return switch (size) {
+            case SMALL  -> 8.00;
+            case MEDIUM -> 12.00;
+            case LARGE  -> 16.00;
+        };
+    }
+
     public void addToOrder() {}
-    public boolean validate() { return false; }
+
+    public boolean validate() {
+        return drinkType != null;
+    }
+
     public String fetchAIDescription() { return ""; }
     public String getAIHint() { return ""; }
-    public String toString() { return ""; }
+
+    public String toString() {
+        return String.format("%s - %s - $%.2f", drinkType, size, getPrice());
+    }
 }

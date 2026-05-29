@@ -18,9 +18,22 @@ public class Topping {
 
     public String getName() { return name; }
     public ToppingCategory getCategory() { return category; }
-    public double getPrice() { return 0.0; }
+
+    public double getPrice() {
+        if (category == ToppingCategory.MEAT || category == ToppingCategory.PREMIUM) {
+            return price;
+        }
+        return 0.0;
+    }
+
     public boolean isExtra() { return isExtra; }
     public void setExtra(boolean isExtra) { this.isExtra = isExtra; }
-    public double getExtraPrice() { return 0.0; }
-    public String toString() { return ""; }
+
+    public double getExtraPrice() {
+        return isExtra ? price : 0.0;
+    }
+
+    public String toString() {
+        return isExtra ? name + " (extra)" : name;
+    }
 }

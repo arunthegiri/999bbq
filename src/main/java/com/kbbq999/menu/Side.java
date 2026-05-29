@@ -1,7 +1,5 @@
 package com.kbbq999.menu;
 
-import com.kbbq999.enums.Size;
-
 public class Side extends MenuItem {
 
     private String sideType;
@@ -12,10 +10,21 @@ public class Side extends MenuItem {
     }
 
     public String getSideType() { return sideType; }
-    public double getPrice() { return 0.0; }
+
+    public double getPrice() {
+        return 8.00;
+    }
+
     public void addToOrder() {}
-    public boolean validate() { return false; }
+
+    public boolean validate() {
+        return sideType != null;
+    }
+
     public String fetchAIDescription() { return ""; }
     public String getAIHint() { return ""; }
-    public String toString() { return ""; }
+
+    public String toString() {
+        return sideType + " - $8.00";
+    }
 }
