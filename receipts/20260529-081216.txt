@@ -1,0 +1,9 @@
+=== 999BBQ Receipt ===
+Date: 05/29/2026 08:12:16
+
+--- Plates ---
+SOUP (SMALL | SOUP)
+  Toppings: Australian Wagyu, Corn Cheese, Kimchi, Mushrooms, Gochujang, Sesame Oil
+  Price: $59.00
+
+Total: $59.00

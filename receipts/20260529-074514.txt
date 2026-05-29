@@ -1,0 +1,9 @@
+=== 999BBQ Receipt ===
+Date: 05/29/2026 07:45:14
+
+--- Plates ---
+SOUP (MEDIUM | SOUP)
+  Toppings: Brisket, Steamed Egg
+  Price: $100.00
+
+Total: $100.00
