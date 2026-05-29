@@ -14,7 +14,7 @@ public class GeminiDescriptionService implements IAIDescribable {
         "Keep responses under 3 sentences.";
 
     private static final String BASE_URL =
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=";
 
     private String apiKey;
 

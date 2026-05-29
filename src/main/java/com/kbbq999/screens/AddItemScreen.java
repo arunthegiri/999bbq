@@ -35,7 +35,7 @@ public class AddItemScreen {
     public AddItemScreen(Scanner scanner, Order order, GeminiDescriptionService geminiService) {
         this.scanner = scanner;
         this.order = order;
-        this.geminiService = geminiService;
+        this.geminiService = new GeminiDescriptionService(System.getenv("GEMINI_API_KEY"));
         this.currentSession = null;
     }
 
@@ -107,7 +107,6 @@ public class AddItemScreen {
                 triggerTellMeMore(item);
                 return;
             }
-            System.out.println("Enter 1 or 2:");
         }
     }
 
@@ -118,23 +117,22 @@ public class AddItemScreen {
     }
 
     public void handleGeminiLoop(GeminiSession session) {
-        String response = geminiService.describe(session.getCurrentItem().getName());
+        System.out.println(geminiService.describe(session.getCurrentItem().getName()));
         while (true) {
-            System.out.println(response);
             System.out.println("--------------------------------");
             System.out.println("Type your question or:");
             System.out.println("1) Add to cart");
             System.out.println("2) Back to menu");
             String input = scanner.nextLine().trim();
             if ("1".equals(input)) {
-                session.close();
                 order.addItem(session.getCurrentItem());
+                session.close();
                 return;
             } else if ("2".equals(input)) {
                 session.close();
                 return;
             } else {
-                response = session.ask(input);
+                System.out.println(session.ask(input));
             }
         }
     }
@@ -154,18 +152,27 @@ public class AddItemScreen {
             System.out.println((i + 1) + ") " + options[i]);
         }
         while (true) {
+            String line = scanner.nextLine().trim();
+            if (line.equals("0")) break;
             int choice;
             try {
-                choice = Integer.parseInt(scanner.nextLine().trim());
+                choice = Integer.parseInt(line);
             } catch (NumberFormatException e) {
+                System.out.println("Pick 1-" + options.length + " or 0 to skip:");
                 continue;
             }
-            if (choice == 0) break;
             if (choice < 1 || choice > options.length) {
                 System.out.println("Pick 1-" + options.length + " or 0 to skip:");
                 continue;
             }
             String name = options[choice - 1];
+            System.out.println("T) Tell me more about this item");
+            String tmm = scanner.nextLine().trim();
+            if (tmm.equalsIgnoreCase("T")) {
+                GeminiSession ts = new GeminiSession(new BBQPlate("", plate.getSize(), plate.getMealType()));
+                ts.start();
+                System.out.println(ts.ask("What is " + name + "? Describe it for a customer"));
+            }
             boolean isExtra = false;
             if (canBeExtra) {
                 System.out.println("Extra? (y/n):");
