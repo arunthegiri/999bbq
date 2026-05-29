@@ -38,3 +38,5 @@ build/
 ### Mac OS ###
 .DS_Storeintuition.txt
 planning.txt
+.DS_Store
+receipts/
