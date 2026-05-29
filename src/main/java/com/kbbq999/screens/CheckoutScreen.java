@@ -16,9 +16,34 @@ public class CheckoutScreen {
         this.receiptService = receiptService;
     }
 
-    public void display() {}
-    public void showOrderDetails() {}
-    public void confirmOrder() {}
-    public void cancelOrder() {}
-    public int getUserChoice() { return 0; }
+    public void display() {
+        showOrderDetails();
+        System.out.println("================================");
+        System.out.println("1) Confirm Order");
+        System.out.println("0) Cancel Order");
+    }
+
+    public void showOrderDetails() {
+        System.out.println("================================");
+        System.out.println("         Order Summary");
+        System.out.println("================================");
+        order.displayOrder();
+    }
+
+    public void confirmOrder() {
+        receiptService.saveReceipt(order);
+        System.out.println("Order confirmed! Receipt saved to receipts/");
+    }
+
+    public void cancelOrder() {
+        System.out.println("Order cancelled.");
+    }
+
+    public int getUserChoice() {
+        try {
+            return Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 }
