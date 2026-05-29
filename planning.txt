@@ -1,3 +1,0 @@
-First thoughts
-This project needs
--interface in other words a contract for what is possible
